@@ -1,8 +1,6 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -46,9 +44,11 @@ public class TechJobs {
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
                     // Print list of skills, employers, etc
+                    Collections.sort(results, String.CASE_INSENSITIVE_ORDER);
                     for (String item : results) {
                         System.out.println(item);
                     }
+                    System.out.println("\nTotal number of "+ columnChoices.get(columnChoice) +"s are "+results.size());
                 }
 
             } else { // choice is "search"
@@ -61,7 +61,8 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm));
+//                    System.out.println("Search all fields not yet implemented.");
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -72,7 +73,9 @@ public class TechJobs {
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
 
-        Integer choiceIdx;
+        //int choiceIdx=-1;
+        int choiceIdx;
+        Boolean invalidDataType = false;
         Boolean validChoice = false;
         String[] choiceKeys = new String[choices.size()];
 
@@ -92,11 +95,8 @@ public class TechJobs {
             for (Integer j = 0; j < choiceKeys.length; j++) {
                 System.out.println("" + j + " - " + choices.get(choiceKeys[j]));
             }
-
             choiceIdx = in.nextInt();
             in.nextLine();
-
-            // Validate user's input
             if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
                 System.out.println("Invalid choice. Try again.");
             } else {
@@ -104,13 +104,39 @@ public class TechJobs {
             }
 
         } while(!validChoice);
+//            if(in.hasNextInt()) {
+//                choiceIdx = in.nextInt();
+//                in.nextLine();
+//
+//            } else {invalidDataType = true;}
+
+
+        // Validate user's input
+//                if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
+//                    System.out.println("Invalid choice. Try again.");
+//                    if(!invalidDataType)
+//                } else {
+//                    validChoice = true;
+//                }
+//
+//        } while(!validChoice && !validDataType);
 
         return choiceKeys[choiceIdx];
     }
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+        if (someJobs.size() != 0) {
+            for (HashMap<String, String> map : someJobs) {
+                System.out.println("*****");
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    System.out.println(entry.getKey() + " : " + entry.getValue());
+                }
+                System.out.println("*****\n");
+            }
+            System.out.println("Total number of records : "+someJobs.size());
+        }else
+            System.out.println(" No Results found");
     }
+
 }
