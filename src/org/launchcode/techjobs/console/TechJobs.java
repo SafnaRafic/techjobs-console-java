@@ -62,7 +62,6 @@ public class TechJobs {
 
                 if (searchField.equals("all")) {
                     printJobs(JobData.findByValue(searchTerm));
-//                    System.out.println("Search all fields not yet implemented.");
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -73,10 +72,10 @@ public class TechJobs {
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
 
-        //int choiceIdx=-1;
+
         int choiceIdx;
-        Boolean invalidDataType = false;
         Boolean validChoice = false;
+        Boolean validType = false;
         String[] choiceKeys = new String[choices.size()];
 
         // Put the choices in an ordered structure so we can
@@ -95,32 +94,23 @@ public class TechJobs {
             for (Integer j = 0; j < choiceKeys.length; j++) {
                 System.out.println("" + j + " - " + choices.get(choiceKeys[j]));
             }
-            choiceIdx = in.nextInt();
-            in.nextLine();
-            if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
+            if(in.hasNextInt()){
+                choiceIdx = in.nextInt();
+                in.nextLine();
+                validType = true;
+            }
+            else {
+                choiceIdx = -1;
+                in.next();
+                validType = false;
+            }
+            if (!validType || choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
                 System.out.println("Invalid choice. Try again.");
             } else {
                 validChoice = true;
             }
 
         } while(!validChoice);
-//            if(in.hasNextInt()) {
-//                choiceIdx = in.nextInt();
-//                in.nextLine();
-//
-//            } else {invalidDataType = true;}
-
-
-        // Validate user's input
-//                if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
-//                    System.out.println("Invalid choice. Try again.");
-//                    if(!invalidDataType)
-//                } else {
-//                    validChoice = true;
-//                }
-//
-//        } while(!validChoice && !validDataType);
-
         return choiceKeys[choiceIdx];
     }
 
